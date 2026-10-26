@@ -1,7 +1,9 @@
 package com.amigoscode.bookstore;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,11 +110,16 @@ public class BookAssistant {
 	 * The full assistant: remembers the conversation and can act for the logged-in customer.
 	 */
 	public String assist(String customerId, String conversationId, String message) {
+		// The memory key includes the customer, so nobody can read or write into
+		// someone else's conversation by guessing its id. It's turned into a UUID because
+		// Spring AI's conversation_id column holds at most 36 characters.
+		String memoryKey = UUID.nameUUIDFromBytes(("assistant:" + customerId + ":" + conversationId)
+				.getBytes(StandardCharsets.UTF_8)).toString();
 		return chatClient.prompt()
 				.user(message)
 				.advisors(advisor -> advisor
 						.advisors(memoryAdvisor)
-						.param(ChatMemory.CONVERSATION_ID, conversationId))
+						.param(ChatMemory.CONVERSATION_ID, memoryKey))
 				// TODO task-2: give the model the BookstoreTools for this request
 				// TODO task-3: pass the customer id to the tools in the ToolContext
 				.call()

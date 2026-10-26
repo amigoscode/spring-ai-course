@@ -54,6 +54,9 @@ Everything the model sends is **untrusted input**. A user can talk the model int
   It's never a tool parameter, so the model can't set it.
 - Tools **check authorization** themselves: `orderStatus` only shows the caller's own orders.
 - Tools **validate** like any API: quantity limits, stock, existing titles.
+- **Memory belongs to one customer too.** `assist` builds the memory key from the customer
+  and the conversation id, so guessing someone's conversation id gets you nothing. (It's
+  hashed into a UUID because Spring AI's `conversation_id` column holds 36 characters.)
 - Risky actions ask for **confirmation** first (in the system prompt, and in real apps
   often a human approval step).
 
