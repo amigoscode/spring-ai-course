@@ -79,6 +79,28 @@ It creates a GitHub Projects board with all your task issues. Switch its layout 
 to drag tasks from Todo to Done.
 </details>
 
+### Windows
+
+Everything works on Windows. Install [Git for Windows](https://git-scm.com/download/win)
+and a [Java 25 JDK](https://adoptium.net/temurin/releases/?version=25). You don't need
+to install Maven: every module has a Maven wrapper (`mvnw` for macOS and Linux,
+`mvnw.cmd` for Windows).
+
+| macOS / Linux | Windows PowerShell | Windows cmd |
+|---|---|---|
+| `./mvnw test` | `.\mvnw test` | `mvnw test` |
+| `./mvnw test -Dtest=Task3RecommendTest` | `.\mvnw test "-Dtest=Task3RecommendTest"` | `mvnw test -Dtest=Task3RecommendTest` |
+| `cp .env.example .env` | `Copy-Item .env.example .env` | `copy .env.example .env` |
+| `curl "localhost:8080/..."` | `curl.exe "localhost:8080/..."` | `curl "localhost:8080/..."` |
+
+- In PowerShell, put `-D...` arguments in quotes, otherwise PowerShell can split them.
+- In Windows PowerShell 5, `curl` is an alias for `Invoke-WebRequest`. Type `curl.exe` instead.
+- Modules from 04 onward need [Docker Desktop](https://www.docker.com/products/docker-desktop/) running.
+- The optional `scripts/create_board.sh` runs in **Git Bash**, which comes with Git for Windows.
+
+The commands in each module's README and TASKS.md use the macOS/Linux form. Swap `./mvnw`
+for `.\mvnw` (PowerShell) or `mvnw` (cmd).
+
 ### 4. Start module 00
 
 Open `00-first-chat` in your IDE (open the module folder, not the repo root) and read its README.
