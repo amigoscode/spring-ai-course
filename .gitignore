@@ -1,0 +1,9 @@
+# Your API key. Never commit it.
+.env
+
+target/
+.idea/
+*.iml
+.vscode/
+.DS_Store
+HELP.md
