@@ -1,0 +1,3 @@
+# Files the student creates themselves. Paths are relative to the repo root.
+02-prompt-templates/src/main/resources/prompts/system.st
+02-prompt-templates/src/main/resources/prompts/recommend.st

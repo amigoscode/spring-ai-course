@@ -1,0 +1,20 @@
+# Students: run this once from the Actions tab after you fork the repo.
+# It creates an issue for every task and a milestone per module, in your fork.
+name: Set up my tasks
+
+on:
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create issues, milestones and labels
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/setup_tasks.py
