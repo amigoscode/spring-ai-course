@@ -18,8 +18,46 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Students use Windows, macOS and Linux. The solution must pass on all three.
+  test:
+    if: github.repository_owner == 'amigoscode'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: solution
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 25
+          cache: maven
+
+      - name: Solution tests pass (mvnw.cmd on Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          for /d %%m in (0* 1*) do (
+            echo ===== %%m
+            pushd %%m
+            call mvnw.cmd -B -q verify || exit /b 1
+            popd
+          )
+
+      - name: Solution tests pass
+        if: runner.os != 'Windows'
+        run: |
+          for module in [0-9][0-9]-*/; do
+            (cd "$module" && ./mvnw -B -q verify)
+          done
+
   publish:
     if: github.repository_owner == 'amigoscode'
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
