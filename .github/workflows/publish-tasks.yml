@@ -37,6 +37,9 @@ jobs:
           java-version: 25
           cache: maven
 
+      # GitHub's Windows and macOS runners can't run Linux containers, so modules
+      # with a compose.yaml (they use Testcontainers) are only compiled there.
+      # Their tests run on Linux in the publish job.
       - name: Solution tests pass (mvnw.cmd on Windows)
         if: runner.os == 'Windows'
         shell: cmd
@@ -44,7 +47,11 @@ jobs:
           for /d %%m in (0* 1*) do (
             echo ===== %%m
             pushd %%m
-            call mvnw.cmd -B -q verify || exit /b 1
+            if exist compose.yaml (
+              call mvnw.cmd -B -q test-compile || exit /b 1
+            ) else (
+              call mvnw.cmd -B -q verify || exit /b 1
+            )
             popd
           )
 
@@ -52,7 +59,11 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           for module in [0-9][0-9]-*/; do
-            (cd "$module" && ./mvnw -B -q verify)
+            if [ -f "$module/compose.yaml" ]; then
+              (cd "$module" && ./mvnw -B -q test-compile)
+            else
+              (cd "$module" && ./mvnw -B -q verify)
+            fi
           done
 
   publish:

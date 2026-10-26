@@ -1,7 +1,9 @@
 package com.amigoscode.bookstore;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.List;
 
 import org.springframework.ai.chat.messages.AssistantMessage;
@@ -25,11 +27,21 @@ public class FakeChatModel implements ChatModel {
 
 	private final List<Prompt> prompts = new ArrayList<>();
 
-	private String reply = "Fake answer from the model";
+	private final Deque<String> replies = new ArrayDeque<>(List.of("Fake answer from the model"));
 
-	public FakeChatModel reply(String reply) {
-		this.reply = reply;
+	/**
+	 * The model answers with these replies in order. The last one repeats forever.
+	 * Also forgets the prompts recorded so far, so each test starts clean.
+	 */
+	public FakeChatModel reply(String... replies) {
+		this.prompts.clear();
+		this.replies.clear();
+		this.replies.addAll(List.of(replies));
 		return this;
+	}
+
+	private String nextReply() {
+		return replies.size() > 1 ? replies.removeFirst() : replies.getFirst();
 	}
 
 	public List<Prompt> prompts() {
@@ -46,13 +58,13 @@ public class FakeChatModel implements ChatModel {
 	@Override
 	public ChatResponse call(Prompt prompt) {
 		prompts.add(prompt);
-		return response(reply);
+		return response(nextReply());
 	}
 
 	@Override
 	public Flux<ChatResponse> stream(Prompt prompt) {
 		prompts.add(prompt);
-		return Flux.fromIterable(Arrays.asList(reply.split("(?<= )"))).map(FakeChatModel::response);
+		return Flux.fromIterable(Arrays.asList(nextReply().split("(?<= )"))).map(FakeChatModel::response);
 	}
 
 	private static ChatResponse response(String text) {
