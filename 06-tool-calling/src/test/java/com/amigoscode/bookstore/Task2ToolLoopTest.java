@@ -52,4 +52,15 @@ class Task2ToolLoopTest {
 		assertThat(toolResponse.responseData()).contains("\"copies\":3");
 	}
 
+	@Test
+	void conversationsBelongToOneCustomer() {
+		model.reply("ok");
+
+		bookAssistant.assist("ana", "shared-id", "My address is Rua Augusta 1, Lisbon");
+		bookAssistant.assist("bob", "shared-id", "What's my address?");
+
+		var texts = model.lastPrompt().getInstructions().stream().map(m -> m.getText()).toList();
+		assertThat(texts).as("bob must not see ana's messages").doesNotContain("My address is Rua Augusta 1, Lisbon");
+	}
+
 }

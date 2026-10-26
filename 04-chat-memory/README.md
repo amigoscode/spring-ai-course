@@ -66,6 +66,14 @@ ChatMemory (MessageWindowChatMemory, last 10)
   random free port, and Spring Boot connects to it for you.
 - **Tests:** Testcontainers starts a fresh Postgres per test run (`TestcontainersConfig`).
 
+### A warning before you copy this into a real app
+
+Here anyone who knows (or guesses) a conversation id can read it, delete it or write into it.
+That keeps the module focused on memory, but it's an
+[IDOR](https://owasp.org/Top10/A01_2021-Broken_Access_Control/) in a real app. Tie every
+conversation to the logged-in user: build the memory key from the user's id, and check
+ownership on every endpoint. Module 06 starts doing this, and module 12 adds Spring Security.
+
 ## Run it
 
 ```bash
