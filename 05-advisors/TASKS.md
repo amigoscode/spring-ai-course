@@ -36,9 +36,12 @@ answer with `SENSITIVE_REFUSAL`, and run with order `Ordered.HIGHEST_PRECEDENCE 
 
 ## Task 3: Write a guard
 
-1. Implement `PromptInjectionGuardAdvisor.adviseCall`. If the user message matches any of
-   `PATTERNS`, **don't call the chain**. Return a `ChatClientResponse` whose answer is `REFUSAL`.
-2. Add it to the default advisors.
+1. Implement `PromptInjectionGuardAdvisor.isInjection`: true if the user message matches any of
+   `PATTERNS`. Log which pattern matched, but **not** the message: it could contain personal data.
+2. In `adviseCall`, if it's an injection, **don't call the chain**: return `refusal(request)`.
+   `adviseStream` already does the same for streaming requests, so `/api/chat/stream` can't be
+   used to get around the guard.
+3. Add it to the default advisors.
 
 Look at its `getOrder()`. Why must it run before the memory advisor?
 
@@ -47,12 +50,8 @@ Look at its `getOrder()`. Why must it run before the memory advisor?
 <details>
 <summary>Hint</summary>
 
-```java
-ChatResponse refusal = ChatResponse.builder()
-    .generations(List.of(new Generation(new AssistantMessage(REFUSAL))))
-    .build();
-return ChatClientResponse.builder().chatResponse(refusal).context(Map.copyOf(request.context())).build();
-```
+`PATTERNS.stream().filter(p -> p.matcher(userText).find()).findFirst()` gives you the matching
+pattern, if any. Look at `refusal(...)` to see how an advisor builds a response without the model.
 </details>
 
 ## Task 4: Rewrite the request
