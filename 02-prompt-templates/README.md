@@ -65,7 +65,7 @@ the same label.
 ```bash
 ./mvnw spring-boot:run
 curl "localhost:8080/api/recommendations?topic=concurrency&max=2"
-curl -X POST localhost:8080/api/reviews/sentiment -d "Best Java book I own"
+curl -X POST -H "Content-Type: text/plain" localhost:8080/api/reviews/sentiment -d "Best Java book I own"
 ```
 
 ## Your turn
