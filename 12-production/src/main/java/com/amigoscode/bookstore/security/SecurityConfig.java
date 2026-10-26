@@ -28,6 +28,8 @@ public class SecurityConfig {
 				// Read-only catalog tools for any MCP client (module 09). Nothing here acts for a user.
 				.requestMatchers("/mcp", "/mcp/**").permitAll()
 				.requestMatchers("/actuator/**").hasRole("ADMIN")
+				// What the whole app has spent is business data, not something customers should see.
+				.requestMatchers("/api/usage").hasRole("ADMIN")
 				.anyRequest().authenticated())
 			.httpBasic(Customizer.withDefaults())
 			// A stateless JSON API with no browser sessions or cookies, so no CSRF tokens needed.
@@ -46,7 +48,7 @@ public class SecurityConfig {
 	// SOLUTION-ELSE
 	// TASK: // TODO task-1: a SecurityFilterChain that
 	// TASK: //   - lets anyone call /actuator/health and the read-only MCP server at /mcp
-	// TASK: //   - only lets ADMIN users call the other /actuator endpoints
+	// TASK: //   - only lets ADMIN users call the other /actuator endpoints and /api/usage
 	// TASK: //   - requires login (HTTP Basic) for everything else
 	// TASK: //   - is stateless, with CSRF off (a JSON API without cookies)
 	// TASK: // and a UserDetailsService with ana / ana-password and bob / bob-password (CUSTOMER),

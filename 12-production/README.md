@@ -75,7 +75,7 @@ way in production: they're full of personal data.
 curl -i "localhost:8080/api/chat?question=hi"                          # 401
 curl -u ana:ana-password "localhost:8080/api/chat?question=Any+Java+books"
 curl -u admin:admin-password localhost:8080/actuator/metrics/gen_ai.client.token.usage
-for i in $(seq 1 11); do curl -s -o /dev/null -w "%{http_code} " -u bob:bob-password localhost:8080/api/usage; done
+for i in $(seq 1 11); do curl -s -o /dev/null -w "%{http_code} " -u bob:bob-password localhost:8080/api/conversations/mine; done
 ```
 
 ## Your turn

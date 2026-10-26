@@ -8,7 +8,7 @@ Run every test in the module with `./mvnw test`, or one task with the command un
 In `SecurityConfig`, define:
 
 1. A `SecurityFilterChain`: `/actuator/health` and the read-only MCP server (`/mcp`) are public,
-   the other `/actuator` endpoints are for `ADMIN` only, everything else needs a login with
+   the other `/actuator` endpoints and `/api/usage` are for `ADMIN` only, everything else needs a login with
    HTTP Basic. It's a stateless JSON API: no sessions, and CSRF off.
 2. A `UserDetailsService` with `ana` / `ana-password` and `bob` / `bob-password` (role
    `CUSTOMER`), and `admin` / `admin-password` (role `ADMIN`). Encode the passwords with the

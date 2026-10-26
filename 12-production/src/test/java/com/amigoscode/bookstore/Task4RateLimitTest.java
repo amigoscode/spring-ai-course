@@ -75,10 +75,10 @@ class Task4RateLimitTest {
 		void theEleventhRequestIsRefused() {
 			rateLimiter.reset();
 			for (int i = 0; i < RateLimiter.MAX_REQUESTS; i++) {
-				assertThat(mvc.get().uri("/api/usage").with(httpBasic("bob", "bob-password"))).hasStatusOk();
+				assertThat(mvc.get().uri("/api/conversations/any").with(httpBasic("bob", "bob-password"))).hasStatusOk();
 			}
 
-			var refused = mvc.get().uri("/api/usage").with(httpBasic("bob", "bob-password"));
+			var refused = mvc.get().uri("/api/conversations/any").with(httpBasic("bob", "bob-password"));
 
 			assertThat(refused).hasStatus(HttpStatus.TOO_MANY_REQUESTS).hasHeader("Retry-After", "60");
 		}

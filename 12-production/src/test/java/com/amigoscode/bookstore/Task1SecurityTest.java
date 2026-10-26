@@ -31,18 +31,24 @@ class Task1SecurityTest {
 
 	@Test
 	void theApiNeedsALogin() {
-		assertThat(mvc.get().uri("/api/usage")).hasStatus(HttpStatus.UNAUTHORIZED);
+		assertThat(mvc.get().uri("/api/conversations/any")).hasStatus(HttpStatus.UNAUTHORIZED);
 	}
 
 	@Test
 	void customersCanLogIn() {
-		assertThat(mvc.get().uri("/api/usage").with(httpBasic("ana", "ana-password"))).hasStatusOk();
-		assertThat(mvc.get().uri("/api/usage").with(httpBasic("bob", "bob-password"))).hasStatusOk();
+		assertThat(mvc.get().uri("/api/conversations/any").with(httpBasic("ana", "ana-password"))).hasStatusOk();
+		assertThat(mvc.get().uri("/api/conversations/any").with(httpBasic("bob", "bob-password"))).hasStatusOk();
 	}
 
 	@Test
 	void aWrongPasswordIsRefused() {
-		assertThat(mvc.get().uri("/api/usage").with(httpBasic("ana", "guess"))).hasStatus(HttpStatus.UNAUTHORIZED);
+		assertThat(mvc.get().uri("/api/conversations/any").with(httpBasic("ana", "guess"))).hasStatus(HttpStatus.UNAUTHORIZED);
+	}
+
+	@Test
+	void onlyAdminsSeeWhatTheAppSpends() {
+		assertThat(mvc.get().uri("/api/usage").with(httpBasic("ana", "ana-password"))).hasStatus(HttpStatus.FORBIDDEN);
+		assertThat(mvc.get().uri("/api/usage").with(httpBasic("admin", "admin-password"))).hasStatusOk();
 	}
 
 	@Test
