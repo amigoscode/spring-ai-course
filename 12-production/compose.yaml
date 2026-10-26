@@ -1,0 +1,15 @@
+# Started for you by Spring Boot when you run the app (spring-boot-docker-compose).
+# Postgres gets a random free port on your machine, so modules never clash.
+# Open a SQL shell with: docker compose exec postgres psql -U bookstore
+services:
+  postgres:
+    image: 'pgvector/pgvector:pg17'
+    environment:
+      - 'POSTGRES_DB=bookstore'
+      - 'POSTGRES_USER=bookstore'
+      - 'POSTGRES_PASSWORD=bookstore'
+    labels:
+      # pgvector/pgvector is Postgres, but Spring Boot only knows that if you tell it.
+      - 'org.springframework.boot.service-connection=postgres'
+    ports:
+      - '5432'

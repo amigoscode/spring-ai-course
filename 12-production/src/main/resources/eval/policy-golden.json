@@ -1,0 +1,12 @@
+[
+  {"question": "How long do I have to return a printed book?", "expectedSource": "returns.md", "mustMention": ["30 days"]},
+  {"question": "Is returning a book free if I live in Germany?", "expectedSource": "returns.md", "mustMention": ["free"]},
+  {"question": "Can I return an e-book after downloading it?", "expectedSource": "returns.md", "mustMention": ["can't"]},
+  {"question": "How much does express delivery cost?", "expectedSource": "shipping.md", "mustMention": ["9.90"]},
+  {"question": "When is standard shipping free?", "expectedSource": "shipping.md", "mustMention": ["50"]},
+  {"question": "Do you deliver printed books to Canada?", "expectedSource": "shipping.md", "mustMention": ["Europe"]},
+  {"question": "Can I pay by bank transfer?", "expectedSource": "payments.md", "mustMention": ["don't"]},
+  {"question": "How long is a gift card valid?", "expectedSource": "payments.md", "mustMention": ["2 years"]},
+  {"question": "How many points do I need for a voucher?", "expectedSource": "loyalty.md", "mustMention": ["100"]},
+  {"question": "Do shipping costs earn loyalty points?", "expectedSource": "loyalty.md", "mustMention": ["don't"]}
+]

@@ -1,0 +1,7 @@
+[
+  {"recipient": "My nephew, he just started a Java bootcamp", "occasion": "birthday", "budget": 50, "anyOf": ["Effective Java", "Head First Design Patterns", "Spring in Action", "Clean Code"]},
+  {"recipient": "A colleague who keeps writing code without tests", "occasion": "farewell", "budget": 40, "anyOf": ["Test Driven Development: By Example", "Clean Code", "Refactoring"]},
+  {"recipient": "My manager, who is moving our monolith to microservices", "occasion": "thank you", "budget": 60, "anyOf": ["Designing Data-Intensive Applications", "Domain-Driven Design"]},
+  {"recipient": "A friend who just became a senior engineer and wants to grow their career", "occasion": "promotion", "budget": 45, "anyOf": ["The Pragmatic Programmer", "Clean Code", "Refactoring"]},
+  {"recipient": "Someone who loves fast, multi-threaded Java code", "occasion": "birthday", "budget": 100, "anyOf": ["Effective Java", "Designing Data-Intensive Applications"]}
+]
