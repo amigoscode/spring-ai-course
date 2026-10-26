@@ -55,8 +55,10 @@ Everything the model sends is **untrusted input**. A user can talk the model int
 - Tools **check authorization** themselves: `orderStatus` only shows the caller's own orders.
 - Tools **validate** like any API: quantity limits, stock, existing titles.
 - **Memory belongs to one customer too.** `assist` builds the memory key from the customer
-  and the conversation id, so guessing someone's conversation id gets you nothing. (It's
-  hashed into a UUID because Spring AI's `conversation_id` column holds 36 characters.)
+  and the conversation id. (It's hashed into a UUID because Spring AI's `conversation_id`
+  column holds 36 characters.) This isn't complete yet: the customer comes from a header
+  anyone can set, and module 04's `/api/conversations/{id}` endpoint still accepts any raw key,
+  including a computed one. Module 12 closes both holes with Spring Security.
 - Risky actions ask for **confirmation** first (in the system prompt, and in real apps
   often a human approval step).
 
