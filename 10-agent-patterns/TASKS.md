@@ -42,7 +42,10 @@ A `switch` on `decision.route()` that returns the answer.
 ## Task 3: Parallelization
 
 Implement `ReviewAnalyzer.summarize(reviews)`: classify every review with
-`bookAssistant.classify(review)` **at the same time**, then count how many got each `Sentiment`.
+`classifyWithPermit(review)` **at the same time**, then count how many got each `Sentiment`.
+
+The limits are already there: at most `MAX_REVIEWS` per request, and `classifyWithPermit` lets
+only `MAX_PARALLEL_CALLS` model calls run at once. Parallel code that calls a paid API needs both.
 
 **Done when:** `./mvnw test -Dtest=Task3ParallelTest` passes (the test model takes 200ms per
 call, so a sequential version takes 2 seconds and fails)
@@ -59,7 +62,8 @@ then `future.get()` each one and `Collectors.groupingBy(Function.identity(), Col
 Implement `ReadingPlanner.plan(goal)`:
 
 1. **Orchestrator**: split the goal into a `Plan` of 2 to 4 phases (structured output).
-2. **Workers**: one call per phase that picks 1 or 2 catalog books for it.
+2. **Workers**: one call per phase that picks 1 or 2 catalog books for it. The model decides how
+   many phases there are, so run at most `MAX_PHASES` workers.
 3. **Synthesizer**: one call that combines the worker answers into a reading plan.
 
 **Done when:** `./mvnw test -Dtest=Task4OrchestratorTest` passes

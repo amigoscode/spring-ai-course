@@ -38,4 +38,17 @@ class Task4OrchestratorTest {
 		assertThat(prompts.get(4).getUserMessage().getText()).contains("Worker answer");
 	}
 
+	@Test
+	void neverRunsMoreThanFourWorkers() {
+		model.reply("""
+				{"phases": [
+				  {"title": "1", "focus": "a"}, {"title": "2", "focus": "b"}, {"title": "3", "focus": "c"},
+				  {"title": "4", "focus": "d"}, {"title": "5", "focus": "e"}, {"title": "6", "focus": "f"}
+				]}""", "Worker answer");
+
+		planner.plan("learn everything");
+
+		assertThat(model.prompts()).as("1 plan + at most 4 workers + 1 synthesis").hasSize(6);
+	}
+
 }

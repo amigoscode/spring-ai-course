@@ -50,6 +50,14 @@ class Task3ParallelTest {
 		assertThat(millis).as("10 calls of 200ms each, at the same time").isLessThan(1500);
 	}
 
+	@Test
+	void refusesTooManyReviews() {
+		var reviews = IntStream.range(0, 51).mapToObj(i -> "Review " + i).toList();
+
+		org.assertj.core.api.Assertions.assertThatThrownBy(() -> analyzer.summarize(reviews))
+			.isInstanceOf(IllegalArgumentException.class);
+	}
+
 	/**
 	 * A model that takes 200ms per call, like a real one, and answers from the review text.
 	 */

@@ -18,6 +18,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReadingPlanner {
 
+	/**
+	 * The model decides how many workers run. Cap it, so a strange plan can't start 50 calls.
+	 */
+	static final int MAX_PHASES = 4;
+
 	private final ChatClient chatClient;
 
 	private final BookCatalog catalog;
@@ -38,6 +43,7 @@ public class ReadingPlanner {
 
 		List<String> sections = plan.phases()
 			.stream()
+			.limit(MAX_PHASES)
 			.map(phase -> chatClient.prompt()
 				.user(u -> u.text("""
 						Learning phase: {phase}
@@ -59,7 +65,7 @@ public class ReadingPlanner {
 			.content();
 		// SOLUTION-ELSE
 		// TASK: // TODO task-4: the orchestrator splits the goal into a Plan of phases (structured output),
-		// TASK: // one worker call per phase picks books from the catalog,
+		// TASK: // one worker call per phase (at most MAX_PHASES) picks books from the catalog,
 		// TASK: // and a last call combines the sections into a reading plan
 		// TASK: throw new UnsupportedOperationException("TODO task-4");
 		// SOLUTION-END
