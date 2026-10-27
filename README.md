@@ -14,23 +14,24 @@ explains the idea, a `TASKS.md` with what to build, and tests that turn green wh
 | 00 | [First Chat](00-first-chat) | `ChatClient`, DeepSeek config, tokens | No |
 | 01 | [ChatClient in Depth](01-chat-client) | Message roles, options, streaming, no memory | No |
 | 02 | [Prompt Templates](02-prompt-templates) | `.st` templates, prompt stuffing, few-shot | No |
-| 03 | Structured Output | `.entity(...)`, records, lists, validation | Coming soon |
-| 04 | Chat Memory | `MessageChatMemoryAdvisor`, JDBC memory | Coming soon |
-| 05 | Advisors | Custom advisors, logging, guardrails | Coming soon |
-| 06 | Tool Calling | `@Tool`, calling your own services | Coming soon |
-| 07 | Embeddings | Vectors, cosine similarity, pgvector | Coming soon |
-| 08 | RAG | Document ETL, `QuestionAnswerAdvisor` | Coming soon |
-| 09 | MCP | Build and use an MCP server | Coming soon |
-| 10 | Agent Patterns | Chain, routing, orchestrator, evaluator | Coming soon |
-| 11 | Evaluation | Testing non-deterministic output | Coming soon |
-| 12 | Production | Observability, cost, retries, safety | Coming soon |
-| 13 | Capstone | Put it all together, no instructions | Coming soon |
+| 03 | [Structured Output](03-structured-output) | `.entity(...)`, lists, retries, validating model output | No |
+| 04 | [Chat Memory](04-chat-memory) | `MessageChatMemoryAdvisor`, windows, memory in Postgres | Yes |
+| 05 | [Advisors](05-advisors) | Custom advisors, token tracking, guardrails | Yes |
+| 06 | [Tool Calling](06-tool-calling) | `@Tool`, the tool loop, `ToolContext`, authorization | Yes |
+| 07 | [Embeddings](07-embeddings) | Vectors, cosine similarity, local ONNX, pgvector | Yes |
+| 08 | [RAG](08-rag) | ETL, `QuestionAnswerAdvisor`, modular RAG, sources | Yes |
+| 09 | [MCP](09-mcp) | MCP server with tools and resources, MCP client | Yes |
+| 10 | [Agent Patterns](10-agent-patterns) | Chain, routing, parallel, orchestrator, evaluator | Yes |
+| 11 | [Evaluation](11-evaluation) | Golden datasets, retrieval metrics, LLM judge | Yes |
+| 12 | [Production](12-production) | Spring Security, resilience, rate limits, caching, metrics | Yes |
+| 13 | [Capstone: Gift Finder](13-capstone) | A feature brief and acceptance tests, your design | Yes |
 
 ## Stack
 
 - Java 25, Spring Boot 4.1, Spring AI 2.0
 - [DeepSeek](https://platform.deepseek.com) for chat
 - Local ONNX embeddings and Postgres with pgvector (from module 07)
+- The MCP Java SDK (module 09), Spring Security and Actuator (module 12)
 - Docker Compose for the modules that need a database (from module 04)
 
 ## Get started
@@ -127,6 +128,10 @@ Open `00-first-chat` in your IDE (open the module folder, not the repo root) and
 
 The task tests use a **fake model**: they're instant, free, and work offline. The `live`
 tests call DeepSeek for real and cost a fraction of a cent.
+
+From module 04 on, **Docker must be running**: the app starts Postgres with Docker Compose, and
+the tests start their own with Testcontainers. Module 07 also downloads a small embedding model
+(about 90 MB) the first time.
 
 Each module starts where the previous one ended, so you can jump into any module
 even if you skipped one.
