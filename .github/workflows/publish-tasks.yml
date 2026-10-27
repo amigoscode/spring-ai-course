@@ -122,6 +122,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "main is already up to date"
           else
-            git commit -m "Update tasks from solution ${GITHUB_SHA::7}"
+            subject="$(git -C ../solution log -1 --format=%s)"
+            git commit -m "$subject" -m "Generated from solution ${GITHUB_SHA::7}"
             git push origin main
           fi
